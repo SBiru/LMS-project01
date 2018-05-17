@@ -1,0 +1,15 @@
+# This file is auto-generated during the composer install
+parameters:
+    database_host:
+    database_port: null
+    database_name:
+    database_user:
+    database_password:
+    mailer_transport: smtp
+    mailer_host:
+    mailer_user: null
+    mailer_password: null
+    secret:
+    ldap_server:
+    google_maps_apikey:
+    promocion_folder:

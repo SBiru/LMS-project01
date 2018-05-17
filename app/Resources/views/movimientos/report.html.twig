@@ -1,0 +1,129 @@
+{% extends 'print.html.twig' %}
+
+{% block body %}
+<section>
+  <h2>Información General</h2>
+  <div class="block">
+    <div class="row">
+      <div class="col-xs-6">
+        <p><strong>Expediente: </strong>{{movimiento.expediente.numeroExpediente}}</p>
+        <p><strong>Número Interno: </strong>{{movimiento.expediente.numeroInterno}}</p>
+      </div>
+      <div class="col-xs-6">
+        <p><strong>Número de Ficha: </strong>{{movimiento.numeroFicha}}</p>
+        <p><strong>ID Movimiento: </strong>{{movimiento.id}}</p>
+      </div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="row">
+      <div class="col-xs-6">
+        <p><strong>Zona: </strong>{% if movimiento.expediente.zona %}{{movimiento.expediente.zona.descripcion}}{% endif %}</p>
+        <p><strong>Departamento: </strong>{% if movimiento.expediente.zonaDepartamento %}{{movimiento.expediente.zonaDepartamento.descripcion}}{% endif %}</p>
+        <p><strong>Titular: </strong>
+        {% for titular in movimiento.expediente.titulares[0]|e %}
+            {{ titular.nombre }} -
+        {% endfor %}</p>
+      </div>
+      <div class="col-xs-6">
+        <p><strong>Técnico: </strong>{% if movimiento.expediente.tecnico %}{{movimiento.expediente.tecnico.nombre}}{% endif %}</p>
+        <p><strong>Fecha: </strong>{% if movimiento.fechaSalida %}{{movimiento.fechaSalida|date('d-m-Y')}}{% endif %}</p>
+        <p><strong>Etapa: </strong>{% if movimiento.expediente.plurianual %}{{movimiento.etapa}}{% endif %}</p>
+      </div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="row">
+      <div class="col-xs-6">
+        <p><strong>Inspección: </strong>{% if movimiento.inspector %}{{movimiento.inspector.descripcion}}{% endif %}</p>
+        <p><strong>Reinspección: </strong>{% if movimiento.reinspector %}{{movimiento.reinspector.descripcion}}{% endif %}</p>
+      </div>
+      <div class="col-xs-6">
+        <p><strong>Responsable Área SIG: </strong>{% if movimiento.responsable %}{{movimiento.responsable.nombre}}{% endif %}</p>
+      </div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="row">
+      <div class="col-xs-12">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Actividad</th>
+              <th>Presentado</th>
+              <th>Certificado</th>
+              <th>Inspeccionado</th>
+              <th>Registrado</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for actividad in actividades %}
+              <tr>
+                <td>{{actividad.tipoActividad.descripcion}}</td>
+                <td>{{actividad.superficiePresentada|number_format(1)}}</td>
+                <td>{{actividad.superficieCertificada|number_format(1)}}</td>
+                <td>{{actividad.superficieInspeccionada|number_format(2)}}</td>
+                <td>
+                  {% if actividad.superficieRegistrada is not null %}
+                    {{actividad.superficieRegistrada|number_format(2)}}
+                  {% else %}
+                     {{actividad.getSupTotalSuma()}}
+                  {% endif %}
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="block">
+    <div class="row">
+      <div class="col-xs-12">
+        <p><strong>Observaciones: </strong>{{movimiento.observacion}}</p>
+      </div>
+    </div>
+  </div>
+{% if movimiento.expediente.agrupado == false %}
+  <h2>Plantaciones</h2>
+  <div class="row">
+    <div class="col-xs-12">
+      <table class="table table-bordered table-condensed">
+        <thead>
+          <tr>
+            <th>Actividad</th>
+            {% if movimiento.expediente.agrupado %}
+              <th>Titular</th>
+            {% endif %}
+            <th>Tipo</th>
+            <th>Especie</th>
+            <th>Registrado</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for plantacion in plantaciones %}
+           <tr>
+             <td>
+                {{render(controller('AppBundle:Movimientos:getActividad', {'id': plantacion['id']}))}}
+             </td>
+             {% if movimiento.expediente.agrupado %}
+               <td>
+                  {{ render(controller('AppBundle:Movimientos:getTitular', {'id': plantacion[2]})) }}
+                </td>
+              {% endif %}
+             <td>{{ render(controller('AppBundle:Movimientos:getTipoPlantacion', {'id': plantacion[3]})) }}</td>
+             <td>{{ render(controller('AppBundle:Movimientos:getEspecie', {'id': plantacion[4]})) }}</td>
+             <td>
+               {% if plantacion[1] is not null %}
+                {{plantacion[1]}}
+               {% else %}0.0{% endif %}
+             </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,52 @@
+{% set params = app.request.attributes.get('_route_params') %}
+<div id="titulares-tab" class="tab-pane" role="tabpanel">
+	<table id="titulares" class="table table-hover table-grid">
+		<thead>
+			<tr>
+				<th>Titular</th>
+				<th>Especie</th>
+				<th>Tipo de Plantación</th>
+				<th>Presentado</th>
+				<th>Certificado</th>
+				<th>Inspeccionado</th>
+				<th>Observaciones</th>
+			</tr>
+		</thead>
+		<tbody>
+			{% for productor in actividad.getActividadesTitulares() %}
+				<tr>
+					<td>
+						<a href="/titulares/{{productor.titular.id}}">
+							{% if productor.titular %}{{productor.titular.getNombre}}{% endif %}
+						</a>
+					</td>
+					{% if productor.especie.codigoSp is defined %}
+						<td>{{productor.especie.codigoSp}}</td>
+					{% else %}
+						<td></td>
+					{% endif %}
+					<td>
+						{% if productor.tipoPlantacion %}{{productor.tipoPlantacion.codigo}}{% endif %}
+					</td>
+					<td>
+						{% if productor.superficiePresentada is defined and productor.superficiePresentada is not null %}{{productor.superficiePresentada|number_format(1)}}{% endif %}
+					</td>
+					<td>
+						{% if productor.superficieCertificada is defined and productor.superficieCertificada is not null %}{{productor.superficieCertificada|number_format(1)}}{% endif %}
+					</td>
+					<td>
+						{% if productor.superficieInspeccionada is defined and productor.superficieInspeccionada is not null %}{{productor.superficieInspeccionada|number_format(1)}}{% endif %}
+					</td>
+					<td>
+						{% if productor.observaciones %}{{productor.observaciones}}{% endif %}
+					</td>
+					<td>
+						<a id="nav-edit-productor" href="{{path('actividadestitulares_edit', {'idExp': params.id, 'idMov': params.idMov, 'idAct': params.idAct, 'id': productor.id})}}">
+							<span class="glyphicon glyphicon-edit" aria-hidden="true"></a>
+						</span>
+					</td>
+				</tr>
+			{% endfor %}
+		</tbody>
+	</table>
+</div>

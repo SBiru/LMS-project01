@@ -1,0 +1,57 @@
+# Learn more about services, parameters and containers at
+# http://symfony.com/doc/current/book/service_container.html
+parameters:
+#    parameter_name: value
+
+services:
+     plantaciones_manager:
+        class: AppBundle\Controller\PlantacionesController
+        arguments: [ "@doctrine.orm.entity_manager" ]
+
+     app.form.type.actividades_plantaciones:
+        class: AppBundle\Form\ActividadesPlantacionesType
+        arguments: [ "@doctrine.orm.entity_manager" ]
+        tags:
+            - { name: form.type }
+
+     app.form.type.actividades_titulares:
+        class: AppBundle\Form\ActividadesTitularesType
+        arguments: [ "@doctrine.orm.entity_manager" ]
+        tags:
+            - { name: form.type }
+
+     app.form.type.plantaciones:
+       class: AppBundle\Form\PlantacionesType
+       arguments: [ "@doctrine.orm.entity_manager" ]
+       tags:
+         -  { name: form.type }
+
+     app.form.type.editar_plantaciones:
+       class: AppBundle\Form\PlantacionesEditarType
+       arguments: [ "@doctrine.orm.entity_manager" ]
+       tags:
+         -  { name: form.type }
+
+     app.form.type.actividades:
+       class: AppBundle\Form\ActividadesType
+       arguments: [ "@doctrine.orm.entity_manager" ]
+       tags:
+         -  { name: form.type }
+
+     app.form.type.plantaciones_aportes:
+       class: AppBundle\Form\PlantacionesAportesType
+       arguments: [ "@doctrine.orm.entity_manager" ]
+       tags:
+         -  { name: form.type }
+
+     Symfony\Component\Ldap\Ldap:
+        arguments: ['@Symfony\Component\Ldap\Adapter\ExtLdap\Adapter']
+
+     Symfony\Component\Ldap\Adapter\ExtLdap\Adapter:
+        arguments:
+            -   host: "%ldap_server%"
+                port: 389
+                # encryption: tls
+                options:
+                    protocol_version: 3
+                    referrals: false

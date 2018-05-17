@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	{{ include('flash/message.html.twig') }}
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-md-3">
+          {{ include('tecnicos/search.html.twig',{'search_form':search_form,'param':param}) }}
+        </div>
+          <div class="col-md-9">
+          <table id="tecnicos" class="table table-hover table-grid">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>DNI</th>
+                <th>CUIT</th>
+                <th class="icon">Activo</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for tecnico in tecnicos %}
+              <tr data-link="/tecnicos/{{tecnico.id}}">
+                <td>{{ tecnico.id }}</td>
+                <td>{{ tecnico.nombre }}</td>
+                <td>{{ tecnico.dni }}</td>
+                <td>{{ tecnico.cuit }}</td>
+                <td class="icon">
+                  {% if tecnico.activo %}
+                    <span class="glyphicon glyphicon-ok"></span>
+                  {% else %}
+                    <span class="glyphicon glyphicon-remove"></span>
+                  {% endif %}
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% if tecnicos|length >14 %}
+          <div class="well well-sm clearfix">
+            <div class="pagination-info pull-left">
+              Mostrando <b>
+                {{(tecnicos.getItemNumberPerPage * tecnicos.getCurrentPageNumber) - (tecnicos.getItemNumberPerPage -1) }} -
+                {{tecnicos.getItemNumberPerPage * tecnicos.getCurrentPageNumber }}</b>
+              de
+                <b> {{ tecnicos.getTotalItemCount }} </b>
+            </div>
+              <ul class="pagination pull-right">
+                {{ knp_pagination_render(tecnicos) }}
+              </ul>
+          </div>
+          {% endif %}
+        </div>
+    </div>
+  </div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+	{% form_theme form 'bootstrap_3_layout.html.twig' %}
+	{{ include('actividadestitulares/modal_especies.html.twig') }}
+	{{ include('titulares/modal_search.html.twig') }}
+
+	<div class="row">
+		<div class="col-md-5">
+			<h2>Agregar Productor</h2>
+			{{ form_start(form) }}
+			{{ form_label(form.titular) }}
+			<div class="input-group">
+				{{ form_errors(form.titular) }}
+				{{ form_widget(form.titular) }}
+				<span class="input-group-btn">
+					<button id="add-titular" class="btn btn-default" type="button" data-toggle="modal" data-target="#titulares-modal">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					</button>
+					<button id="remove-titular" class="btn btn-default" type="button">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+				</span>
+			</div>
+			{{ form_label(form.tipoPlantacion) }}
+			{{ form_errors(form.tipoPlantacion) }}
+			{{ form_widget(form.tipoPlantacion) }}
+			{{ form_label(form.especie) }}
+			<div class="input-group">
+				{{ form_errors(form.especie) }}
+				{{ form_widget(form.especie) }}
+				<span class="input-group-btn">
+					<button id="add-especie" class="btn btn-default" type="button" data-toggle="modal" data-target="#especies-modal">
+						<span class="glyphicon glyphicon-search" aria-hidden="true"></span>
+					</button>
+					<button id="remove-especie" class="btn btn-default" type="button">
+						<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+					</button>
+				</span>
+			</div>
+			{{ form_widget(form) }}
+			<a id="cancel-actividad" class="btn btn-default" onClick="history.go(-1);return true;">Cancelar</a>
+			<input id="save-actividad" class="btn btn-primary pull-right" type="submit" value="Guardar"/>
+			{{ form_end(form) }}
+		</div>
+	</div>
+{% endblock %}
+
+{% block javascripts %}
+	{{parent()}}
+	<script src="{{ asset('js/actividadesTitulares.js') }}"></script>
+{% endblock %}
